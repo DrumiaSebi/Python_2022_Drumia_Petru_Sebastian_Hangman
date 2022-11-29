@@ -1,0 +1,10 @@
+politist
+medic
+avocat
+pompier
+sofer
+pilot
+asistent
+artist
+informatician
+cercetator

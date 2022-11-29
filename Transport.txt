@@ -1,0 +1,10 @@
+bicicleta
+masina
+scuter
+autobuz
+tren
+avion
+motocicleta
+vapor
+elicopter
+microbuz
