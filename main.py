@@ -1,13 +1,22 @@
 import random
+from colorama import Fore
+from colorama import Style
 def chose_category():
     categories = ["Animale", "Copaci", "Imbracaminte, accesorii", "Mancare", "Meserii", "Parti ale corpului",
                   "Personalitati", "Sporturi", "Tari", "Transport"]
-    print("Please chose the category you would like your word to be from:")
+    print("You can get a word from the following categories:")
     for index, category in enumerate(categories):
         print("{0}: {1}".format(str(index+1), category))
     print()
-    chosen_category = int(input("Please enter the number for the category you want to chose: "))
-    return categories[chosen_category-1]
+    while True:
+        chosen_category = input("Please enter the number for the category you want to chose: ")
+        if chosen_category.isdigit() and 0 < int(chosen_category) <= len(categories):
+            break
+        else:
+            print(f"{Fore.LIGHTRED_EX}Please select an existing category choosing the specific number!{Style.RESET_ALL}")
+    print(f"{Fore.CYAN}You will be given a random word from {Fore.LIGHTCYAN_EX}{categories[int(chosen_category)-1]}"
+          f"{Fore.CYAN}!{Style.RESET_ALL}")
+    return categories[int(chosen_category)-1]
 
 
 def get_random_word(category):
@@ -16,28 +25,53 @@ def get_random_word(category):
         lines = f.readlines()
         line_index = random.randrange(len(lines))
         word = lines[line_index].strip()
-        print(word)
         return word
 
 
-# def play_game(word):
-#     guessed = "_" * len(word)
-#     tries = len(word) // 2
-#     while tries != 0:
-#         letter = input("Try and guess a letter: ")
-#         if letter in word:
-#             positions_of_letter = [pos for pos, char in enumerate(word) if char == letter]
-#             for position in positions_of_letter:
-#                 guessed[position] = letter
-#                 print(guessed)
-#         else:
-#             print("Letter not in word")
-#             tries -= 1
-#             print("Tries left: {0}".format(tries))
-    # print(guessed)
+def play_game(word):
+    words = word.split(" ")
+    guessed = ""
+    for w in words:
+        guessed += "_" * len(w) + "-"
+    guessed = guessed[:len(guessed)-1]
+    tries = len(word) // 2
+    print(f"You have {Fore.LIGHTBLUE_EX}{tries} tries{Style.RESET_ALL} to guess the word, Good luck!")
+    print(guessed)
+    while tries != 0 and "_" in guessed:
+        letter = input("Try and guess a letter: ").lower()
+        if len(letter) != 1 or not letter.isalpha():
+            print(f"{Fore.LIGHTRED_EX}You can only give a single character as input!{Style.RESET_ALL}")
+        elif letter in guessed.lower():
+            print(f"{Fore.LIGHTRED_EX}This letter is in the word, you already guessed it!{Style.RESET_ALL}")
+        else:
+            letter_up = letter.upper()
+            if letter_up in word or letter in word:
+                positions_of_letter_up = [pos for pos, char in enumerate(word) if char == letter_up]
+                for position in positions_of_letter_up:
+                    guessed = guessed[:position] + letter_up + guessed[position + 1:]
+                positions_of_letter = [pos for pos, char in enumerate(word) if char == letter]
+                for position in positions_of_letter:
+                    guessed = guessed[:position] + letter + guessed[position+1:]
+                print(guessed)
+            else:
+                tries -= 1
+                if tries == 1:
+                    print(f"The given letter is not in the word,{Fore.LIGHTRED_EX} this is your last try!{Style.RESET_ALL}")
+                elif tries < 4:
+                    print(f"The given letter is not in the word,{Fore.RED} you have {tries} tries left!{Style.RESET_ALL}")
+                elif tries < 6:
+                    print(f"The given letter is not in the word,{Fore.LIGHTYELLOW_EX} you have {tries} tries left!{Style.RESET_ALL}")
+                else:
+                    print(f"The given letter is not in the word,{Fore.LIGHTBLUE_EX} you have {tries} tries left!{Style.RESET_ALL}")
+                print(guessed)
+    if tries > 0:
+        print(f"{Fore.CYAN} Congratulations, you guessed the word: {Fore.LIGHTCYAN_EX}{word}{Fore.CYAN}!{Style.RESET_ALL}")
+    else:
+        print(f"{Fore.RED}You failed! Better luck next time, the word was {Fore.LIGHTRED_EX}{word}{Style.RESET_ALL}")
+
 
 
 # get_random_word("Personalitati")
-# play_game(get_random_word("Personalitati"))
+play_game(get_random_word(chose_category()))
 
 
