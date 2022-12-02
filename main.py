@@ -1,6 +1,8 @@
 import random
 from colorama import Fore
 from colorama import Style
+
+
 def chose_category():
     categories = ["Animale", "Copaci", "Imbracaminte, accesorii", "Mancare", "Meserii", "Parti ale corpului",
                   "Personalitati", "Sporturi", "Tari", "Transport"]
@@ -28,6 +30,11 @@ def get_random_word(category):
         return word
 
 
+def write_score(word, score):
+    with open("score.txt", "a") as f:
+        f.write(f"{word}, {score} \n")
+
+
 def play_game(word):
     words = word.split(" ")
     guessed = ""
@@ -35,6 +42,7 @@ def play_game(word):
         guessed += "_" * len(w) + "-"
     guessed = guessed[:len(guessed)-1]
     tries = len(word) // 2
+    initial_tries = tries
     print(f"You have {Fore.LIGHTBLUE_EX}{tries} tries{Style.RESET_ALL} to guess the word, Good luck!")
     print(guessed)
     while tries != 0 and "_" in guessed:
@@ -64,14 +72,16 @@ def play_game(word):
                 else:
                     print(f"The given letter is not in the word,{Fore.LIGHTBLUE_EX} you have {tries} tries left!{Style.RESET_ALL}")
                 print(guessed)
+    failed_tries = initial_tries - tries
     if tries > 0:
-        print(f"{Fore.CYAN} Congratulations, you guessed the word: {Fore.LIGHTCYAN_EX}{word}{Fore.CYAN}!{Style.RESET_ALL}")
+        print(f"{Fore.CYAN} Congratulations, you guessed the word: {Fore.LIGHTCYAN_EX}{word}{Fore.CYAN}! with "
+              f"{Fore.LIGHTCYAN_EX}{failed_tries}{Fore.CYAN} tries.{Style.RESET_ALL}")
+        write_score(word, failed_tries)
     else:
-        print(f"{Fore.RED}You failed! Better luck next time, the word was {Fore.LIGHTRED_EX}{word}{Style.RESET_ALL}")
+        print(f"{Fore.RED}You failed! Better luck next time, the word was {Fore.LIGHTRED_EX}{word}{Fore.RED},you "
+              f"had {Fore.LIGHTRED_EX}{failed_tries}{Fore.RED} attempts.{Style.RESET_ALL}")
 
 
-
-# get_random_word("Personalitati")
 play_game(get_random_word(chose_category()))
 
 
