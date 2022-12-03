@@ -1,9 +1,11 @@
 import random
 import sys
-
 from colorama import Fore, Back, Style
 import keyboard
 import os
+
+# In order for both menus to work properly (in case you are using Pycharm) go to project(from run setting) ->
+# -> Edit Configurations and in Execution section check Emulate terminal in output console.
 
 
 def chose_difficulty():
