@@ -1,4 +1,4 @@
-# The way it works it's straight forward, you try and guess a word and you can see the letter that you already guessed in their respective position from that word,
+The way it works it's straight forward, you try and guess a word and you can see the letter that you already guessed in their respective position from that word,
 while having a limited number of tries. 
 The game difficulty:
 -> easy: you have the same ammount of tries as the lenght of the word
