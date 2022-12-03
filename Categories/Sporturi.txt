@@ -9,3 +9,9 @@ raliu
 rugby
 sumo
 alpinism
+HARD
+scrima
+tir
+wushu
+judo
+haltere

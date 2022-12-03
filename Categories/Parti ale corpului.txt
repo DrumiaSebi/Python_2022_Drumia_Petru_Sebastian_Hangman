@@ -13,3 +13,11 @@ mustata
 spate
 genunchi
 cot
+HARD
+falange
+deltoid
+omoplat
+vertebra
+femur
+stern
+iris

@@ -8,3 +8,8 @@ motocicleta
 vapor
 elicopter
 microbuz
+HARD
+telegondola
+canoe
+monociclu
+hoverboard

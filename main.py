@@ -1,47 +1,123 @@
 import random
-from colorama import Fore
-from colorama import Style
+import sys
+
+from colorama import Fore, Back, Style
+import keyboard
+import os
+
+
+def chose_difficulty():
+    global difficulties, selected_difficulty
+    difficulties = ["easy", "medium", "hard"]
+    selected_difficulty = 0
+
+    def show_menu():
+        global difficulties, selected_difficulty
+        os.system('cls')
+        print("Choose your difficulty:")
+        for index, difficulty in enumerate(difficulties):
+            if selected_difficulty == index:
+                if selected_difficulty == 0:
+                    print(Fore.BLACK + Back.LIGHTGREEN_EX + difficulty + Style.RESET_ALL)
+                elif selected_difficulty == 1:
+                    print(Fore.BLACK + Back.LIGHTYELLOW_EX + difficulty + Style.RESET_ALL)
+                else:
+                    print(Fore.BLACK + Back.LIGHTRED_EX + difficulty + Style.RESET_ALL)
+            else:
+                print(difficulty)
+
+    def up():
+        global selected_difficulty, difficulties
+        selected_difficulty = (selected_difficulty - 1) % len(difficulties)
+        show_menu()
+
+    def down():
+        global selected_difficulty, difficulties
+        selected_difficulty = (selected_difficulty + 1) % len(difficulties)
+        show_menu()
+    show_menu()
+    keyboard.add_hotkey('up', up)
+    keyboard.add_hotkey('down', down)
+    keyboard.wait("enter")
+    return difficulties[selected_difficulty]
 
 
 def chose_category():
-    categories = ["Animale", "Copaci", "Imbracaminte, accesorii", "Mancare", "Meserii", "Parti ale corpului",
-                  "Personalitati", "Sporturi", "Tari", "Transport"]
-    print("You can get a word from the following categories:")
-    for index, category in enumerate(categories):
-        print("{0}: {1}".format(str(index+1), category))
-    print()
-    while True:
-        chosen_category = input("Please enter the number for the category you want to chose: ")
-        if chosen_category.isdigit() and 0 < int(chosen_category) <= len(categories):
-            break
-        else:
-            print(f"{Fore.LIGHTRED_EX}Please select an existing category choosing the specific number!{Style.RESET_ALL}")
-    print(f"{Fore.CYAN}You will be given a random word from {Fore.LIGHTCYAN_EX}{categories[int(chosen_category)-1]}"
-          f"{Fore.CYAN}!{Style.RESET_ALL}")
-    return categories[int(chosen_category)-1]
+    global categories, selected_category
+    selected_category = 0
+    categories = [category.split(".")[0] for category in os.listdir('Categories')]
+
+    def show_menu():
+        global categories, selected_category
+        os.system('cls')
+        print("What category you want your word to be from? Select from those below:")
+        for index, category in enumerate(categories):
+            if index == selected_category:
+                print(f"{Fore.BLACK}{Back.BLUE}-> {category} <-{Style.RESET_ALL}")
+            else:
+                print(category)
+
+    def up():
+        global categories, selected_category
+        selected_category = (selected_category - 1) % len(categories)
+        show_menu()
+
+    def down():
+        global categories, selected_category
+        selected_category = (selected_category + 1) % len(categories)
+        show_menu()
+    show_menu()
+    keyboard.add_hotkey('up', up)
+    keyboard.add_hotkey('down', down)
+    keyboard.wait("enter")
+    keyboard.remove_all_hotkeys()
+    os.system('cls')
+    print(f"You selected the category {Fore.LIGHTCYAN_EX}{categories[selected_category]}{Style.RESET_ALL}.")
+    return categories[selected_category]
 
 
-def get_random_word(category):
+def get_random_word(category, difficulty):
     file = "Categories\\" + category + ".txt"
-    with open(file, "r") as f:
-        lines = f.readlines()
-        line_index = random.randrange(len(lines))
-        word = lines[line_index].strip()
-        return word
+    try:
+        with open(file, "r") as f:
+            lines = f.readlines()
+            hard_start_index = [index for index, line in enumerate(lines) if line.strip() == "HARD"]
+            if difficulty == "hard":
+                line_index = random.randrange(hard_start_index[0]+1, len(lines))
+            else:
+                line_index = random.randrange(hard_start_index[0]-1)
+            word = lines[line_index].strip()
+            return word
+    except IOError as e:
+        print("I/O operation error while trying to get a random word:" + str(e))
+        sys.exit(1)
+    except FileNotFoundError as e:
+        print("File was not fount when trying to get a random word:" + str(e))
+        sys.exit(1)
 
 
 def write_score(word, score):
-    with open("score.txt", "a") as f:
-        f.write(f"{word}, {score} \n")
+    try:
+        with open("score.txt", "a") as f:
+            f.write(f"{word}, {score} \n")
+    except IOError as e:
+        print("I/O operation error while trying to append current score to the score file:" + str(e))
+        sys.exit(1)
+    except FileNotFoundError as e:
+        print("Score file was not found while trying to append to it:" + str(e))
+        sys.exit(1)
 
 
-def play_game(word):
+def play_game(word, difficulty):
     words = word.split(" ")
     guessed = ""
     for w in words:
         guessed += "_" * len(w) + "-"
     guessed = guessed[:len(guessed)-1]
-    tries = len(word) // 2
+    if difficulty == "easy":
+        tries = len(word)
+    else:
+        tries = len(word) // 2 + 1
     initial_tries = tries
     print(f"You have {Fore.LIGHTBLUE_EX}{tries} tries{Style.RESET_ALL} to guess the word, Good luck!")
     print(guessed)
@@ -78,10 +154,22 @@ def play_game(word):
               f"{Fore.LIGHTCYAN_EX}{failed_tries}{Fore.CYAN} tries.{Style.RESET_ALL}")
         write_score(word, failed_tries)
     else:
-        print(f"{Fore.RED}You failed! Better luck next time, the word was {Fore.LIGHTRED_EX}{word}{Fore.RED},you "
-              f"had {Fore.LIGHTRED_EX}{failed_tries}{Fore.RED} attempts.{Style.RESET_ALL}")
+        print(f"{Fore.RED}You failed! Better luck next time, the word was {Fore.LIGHTYELLOW_EX}{word}{Fore.RED},you "
+              f"had {Fore.LIGHTYELLOW_EX}{failed_tries}{Fore.RED} attempts.{Style.RESET_ALL}")
 
 
-play_game(get_random_word(chose_category()))
+difficulty = chose_difficulty()
+category = chose_category()
+play_game(get_random_word(category, difficulty), difficulty)
+
+
+
+
+
+
+
+
+
+
 
 

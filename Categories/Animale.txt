@@ -11,3 +11,11 @@ delfin
 balena
 rechin
 vultur
+HARD
+axolotl
+dingo
+emu
+echidna
+mangusta
+tapir
+varan

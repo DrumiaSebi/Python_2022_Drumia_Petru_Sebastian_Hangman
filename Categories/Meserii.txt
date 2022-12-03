@@ -8,3 +8,9 @@ asistent
 artist
 informatician
 cercetator
+HARD
+chesonier
+arhondar
+trolist
+tripier
+brazor

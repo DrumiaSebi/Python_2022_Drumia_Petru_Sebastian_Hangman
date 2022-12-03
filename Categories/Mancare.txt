@@ -15,3 +15,10 @@ lapte
 oua
 cirese
 capsuni
+HARD
+gazpacho
+sushi
+koshari
+pho
+papanasi
+chiroste

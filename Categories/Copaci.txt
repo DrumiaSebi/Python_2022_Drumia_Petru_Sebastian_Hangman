@@ -11,3 +11,10 @@ maslin
 prun
 cires
 molid
+HARD
+albizia
+fenix
+gorun
+quebracho
+palisandru
+jugastru

@@ -5,9 +5,17 @@ Adolf Hitler
 Abraham Lincoln
 Socrate
 William Shakespeare
-Platon
 Galileo Galilei
 Aristotel
 Isaac Newton
 Leonardo Da Vinci
 Albert Einstein
+HARD
+Platon
+Vincent van Gogh
+Michelangelo
+Karl Marx
+Ludwig van Beethoven
+Friedrich Nietzsche
+Sigmund Freud
+Theodore Roosevelt

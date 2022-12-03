@@ -1,3 +1,17 @@
 prun, 1 
 Albert Einstein, 3 
 China, 1 
+artist, 4 
+Platon, 1 
+autobuz, 3 
+Vincent van Gogh, 1 
+palisandru, 4 
+Australia, 0 
+Qatar, 1 
+Uzbekistan, 5 
+Romania, 3 
+Argentina, 1 
+Argentina, 8 
+Liechtenstein, 6 
+Djibouti, 2 
+pantaloni, 2 
